@@ -5,10 +5,10 @@ from model import weights_init
 import model
 from data_loader import get_minst_loader
 import time
-import torch.utils as utils
+from torchvision import utils
 
 torch.manual_seed(seed)
-device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+
 generator = model.generator().to(device)
 discriminator = model.discriminator().to(device)
 generator.apply(weights_init)
@@ -21,20 +21,6 @@ fake_label_num = 0
 
 optimizer_G = torch.optim.Adam(generator.parameters(), lr_G, betas=(0.5, 0.999))
 optimizer_D = torch.optim.Adam(discriminator.parameters(), lr_D, betas=(0.5, 0.999))
-
-label_one_hot = torch.zeros(10, 10)
-for i in range(10):
-    label_one_hot[i][i] = 1
-label_one_hot = label_one_hot.view(10, 10, 1, 1).to(device)
-
-label_fills = torch.zeros(10, 10, image_size, image_size)
-ones = torch.ones(image_size, image_size)
-for i in range(10):
-    label_fills[i][i] = ones
-label_fills = label_fills.to(device)
-
-fixed_noise = torch.randn(100, dim_noise, 1, 1).to(device)
-fixed_label = label_one_hot[torch.arange(10).repeat(10).sort().values]
 
 img_list = []
 G_losses = []
