@@ -7,18 +7,23 @@ from data_loader import get_minst_loader
 import time
 from torchvision import utils
 
+# 固定种子
 torch.manual_seed(seed)
 
+# 定义生成器和判别器，并分别对权重进行初始化
 generator = model.generator().to(device)
 discriminator = model.discriminator().to(device)
 generator.apply(weights_init)
 discriminator.apply(weights_init)
 
+# 定义损失函数
 loss_function = nn.BCELoss()
 
+# 定义俩个变量
 real_label_num = 1
 fake_label_num = 0
 
+# 定义优化器
 optimizer_G = torch.optim.Adam(generator.parameters(), lr_G, betas=(0.5, 0.999))
 optimizer_D = torch.optim.Adam(discriminator.parameters(), lr_D, betas=(0.5, 0.999))
 
@@ -30,14 +35,17 @@ D_z_list = []
 loss_tep = 10
 
 epochs = num_epochs
+# 取训练数据
 dataset, dataloader = get_minst_loader()
 
 print("Starting Training Loop...")
 
 for epoch in range(num_epochs):
+    # 记录开始时间
     beg_time = time.time()
     for i, data in enumerate(dataloader):
         # Trian Discriminator
+        # 梯度清零
         discriminator.zero_grad()
         real_image = data[0].to(device)
         b_size = real_image.size(0)

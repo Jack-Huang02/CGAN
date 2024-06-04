@@ -31,7 +31,7 @@ imgs = utils.make_grid(imgs, nrow=10)
 plt.imshow(imgs.permute(1, 2, 0)*0.5+0.5)
 
 generator = generator()
-generator.load_state_dict(torch.load('./models/generator_6.pt', map_location=torch.device('cpu')))
+generator.load_state_dict(torch.load('./models/generator_0.pt', map_location=torch.device('cpu')))
 generator.eval()
 
 with torch.no_grad():
